@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexgrid Editor</title>
+</head>
+<body>
+    <div>
+        <p>Reihen</p>
+        <input type="number" id="col-input">
+    </div>
+    <div>
+        <p>Spalter</p>
+        <input type="number" id="row-input">
+    </div>
+    <div>
+        <button id="generateGridButton">Generate Grid</button>
+    </div>
+    <div class="tile-editor">
+        <div id="canvas" style="height: 100vh; background:rgb(255, 255, 255); overflow:scroll; position: relative; flex: auto"></div>
+        <div class="edit-single-tile" style="padding: 5px">
+            <div style="margin-bottom: 10px">
+                <p>Farbe</p>
+                <input type="color" id="color-input" style="width:100%">
+            </div>
+            <div style="margin-bottom: 10px">
+                <p>Event Titel</p>
+                <input type="text" id="headline-input">
+            </div>
+            <div style="margin-bottom: 10px">
+                <p>Event Text</p>
+                <textarea id="event-input"></textarea placeholder="Event Text">
+            </div style="margin-bottom: 10px">
+            <div style="margin-bottom: 10px">
+                <p>Erkundet?</p>
+                <input type="checkbox" id="discovered-input">
+            </div>
+            <div>
+                <button id="save-tile">Hex speichern</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module">
+import  Perlin from './perlin.js';
+const canvas = document.getElementById('canvas');
+const r = 20;
+
+const rowInput = document.getElementById('row-input');
+const colInput = document.getElementById('col-input');
+
+const colorInput = document.getElementById('color-input');
+const headlineInput = document.getElementById('headline-input');
+const eventInput = document.getElementById('event-input');
+const discoveredInput = document.getElementById('discovered-input');
+
+const retrievedData = localStorage.getItem('jsonData');
+const parsedData = JSON.parse(retrievedData);
+
+const generateGridButton = document.getElementById('generateGridButton');
+
+generateGridButton.addEventListener('click', generateGrid);
+
+const saveTile = document.getElementById('save-tile');
+
+function killGrid() {
+    hexGrid = [];
+  const hexagons = document.querySelectorAll(".hexagon");
+  for (let i = 0; i < hexagons.length; i++) {
+    hexagons[i].remove();
+  }
+}
+killGrid()
+
+if(parsedData === null) {
+    var hexGrid = [];
+} else {
+    var hexGrid = parsedData;
+}
+let currentIndex = [];
+
+saveTile.addEventListener('click', function() {
+    if (currentIndex.length !== 0) {
+        const hexagons = document.querySelectorAll(".active");
+        for (let i = 0; i < hexagons.length; i++) {
+            if(colorInput.value !== "#000000") {
+                hexagons[i].style.backgroundColor = colorInput.value;
+                hexGrid[currentIndex[i]].color = colorInput.value;
+            }
+            if (headlineInput.value !== "" && eventInput.value !== "") {
+                hexGrid[currentIndex[i]].eventHeadline = headlineInput.value;
+                hexGrid[currentIndex[i]].event = eventInput.value;
+                hexagons[i].innerHTML = '!';
+            }
+            if (discoveredInput.checked) {
+                hexGrid[currentIndex[i]].discovered = true;
+            } else {
+                hexGrid[currentIndex[i]].discovered = false;
+            }
+        };
+        const activeHexagons = document.querySelectorAll(".active");
+        for (let i = 0; i < activeHexagons.length; i++) {
+            activeHexagons[i].classList.remove("active");
+        }
+        const jsonData = JSON.stringify(hexGrid);
+
+        localStorage.setItem('jsonData', jsonData);
+        currentIndex = [];
+    }
+});
+
+if(parsedData !== null) {
+    drawSavedGrid();
+}
+function drawSavedGrid() {
+  const x0 = 0;
+  const y0 = 0; // Start at the top of the canvas
+  const dx = 3 * r;
+  const dy = Math.sqrt(3) * r / 2; // distance between rows in a hexagonal grid
+
+  for (let i = 0; i < parsedData.length; i++) {
+      const x = x0 + parsedData[i].x * dx + (parsedData[i].y % 2) * (r*1.5); // offset every other column
+      const y = y0 + parsedData[i].y * dy;
+      drawHexagon(x, y, parsedData[i].color, parsedData[i].discovered, i, parsedData[i].event, parsedData[i].eventHeadline);
+  }
+}
+
+function generateGrid() {
+    killGrid()
+    const perlin = new Perlin();
+    const row = rowInput.value;
+    const col = colInput.value * 2;
+    const x0 = 0;
+    const y0 = 0; // Start at the top of the canvas
+    const dx = 3 * r;
+    const dy = Math.sqrt(3) * r / 2; // distance between rows in a hexagonal grid
+
+    for (let i = 0; i < row; i++) {
+        for (let j = 0; j < col; j++) {
+        const x = x0 + i * dx + (j % 2) * (r*1.5); // offset every other column
+        const y = y0 + j * dy;
+        const colorvalue = perlin.perlin(i*0.075, j*0.0375);
+        if(colorvalue < -0.25) {
+            drawHexagon(x, y, "#0081d6", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#0081d6", discovered: false, event: "", eventHeadline: ""});
+        }
+        else if(colorvalue < -0.15) {
+            drawHexagon(x, y, "#0099ff", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#0099ff", discovered: false, event: "", eventHeadline: ""});
+        } else if(colorvalue < -0.095) {
+            drawHexagon(x, y, "#ffff75", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#ffff75", discovered: false, event: "", eventHeadline: ""});
+        }
+        else if(colorvalue < 0.1) {
+            drawHexagon(x, y, "#b0eb80", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#b0eb80", discovered: false, event: "", eventHeadline: ""});
+        } 
+        else if(colorvalue < 0.25) {
+            drawHexagon(x, y, "#5dd55d", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#5dd55d", discovered: false, event: "", eventHeadline: ""});
+        } else if(colorvalue < 0.3){
+            drawHexagon(x, y, "#C4A484", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#C4A484", discovered: false, event: "", eventHeadline: ""});
+        } 
+        else {
+            drawHexagon(x, y, "#808080", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#808080", discovered: false, event: "", eventHeadline: ""});
+        }
+    }}
+    const jsonData = JSON.stringify(hexGrid);
+
+    localStorage.setItem('jsonData', jsonData);
+}
+
+function drawHexagon(x, y, color, discovered, index, event, eventHeadline) {
+  const newHexagon = document.createElement("div");
+    newHexagon.style.backgroundColor = color;
+    newHexagon.style.cursor = "pointer";
+    newHexagon.addEventListener("click", function(event) {
+        const hexagons = document.querySelectorAll(".active");
+        if (!event.shiftKey) {
+            for (let i = 0; i < hexagons.length; i++) {
+                hexagons[i].classList.remove("active");
+                currentIndex = [];
+            }
+        }
+        currentIndex.push(index);
+        newHexagon.classList.add("active");
+    });
+    if(event !== "" && eventHeadline !== "") {
+        newHexagon.innerHTML = '!';
+    }
+  newHexagon.style.width = r * 2  + "px";
+  newHexagon.style.height = r * 2  + "px";
+  newHexagon.style.lineHeight = r * 2 - 3 + "px";
+  newHexagon.style.textAlign = "center";
+  newHexagon.style.fontSize = r + 'px';
+  newHexagon.style.fontWeight = "bold";
+  newHexagon.style.color = "white";
+  newHexagon.style.position = "absolute";
+  newHexagon.style.left = x + "px";
+  newHexagon.style.top = y + "px";
+  newHexagon.style.clipPath = "polygon(25% 10%, 75% 10%, 95% 50%, 75% 90%, 25% 90%, 5% 50%)"
+  newHexagon.classList.add("hexagon");
+  canvas.appendChild(newHexagon);
+}
+
+function shadeColor(color, percent) {
+
+var R = parseInt(color.substring(1,3),16);
+var G = parseInt(color.substring(3,5),16);
+var B = parseInt(color.substring(5,7),16);
+
+R = parseInt(R * (100 + percent) / 100);
+G = parseInt(G * (100 + percent) / 100);
+B = parseInt(B * (100 + percent) / 100);
+
+R = (R<255)?R:255;  
+G = (G<255)?G:255;  
+B = (B<255)?B:255;  
+
+R = Math.round(R)
+G = Math.round(G)
+B = Math.round(B)
+
+var RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+var GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+return "#"+RR+GG+BB;
+}
+</script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .tile-editor {
+        display: flex;
+        flex-direction: row;
+    }
+    .active {
+        background-color: grey !important;
+    }
+</style>
+</html>

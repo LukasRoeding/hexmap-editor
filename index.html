@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS Hexgrid</title>
+</head>
+<body>
+  <div id="event-modal">
+    <h2 id="event-modal-headline"></h2>
+    <p id="event-modal-text"></p>
+    <button id="close-modal">X</button>
+  </div>
+  <div id="canvas" style="height: 100vh; background:rgb(0, 0, 0); overflow:scroll; position: relative"></div>
+  <div style="min-height: 20vh; background: burlywood; border-top: 5px solid rgb(255, 234, 207); display:none">
+    <h2 style="color: white; padding-top: 10px; font-size: xx-large;">Zeitachse<h1>
+    <div class="slidecontainer">
+      <input id="timeSlider" type="range" style="width:100vw" value="0"  class="slider">
+      <div id="output"></div>
+    </div>
+  </div>
+  <script type="module" src="main.js"></script>
+</body>
+<style>
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+#event-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  margin-top: 5vh;
+  margin-left: 5vw;
+  left: 0;
+  top: 0;
+  width: 90vw;
+  height: 90vh;
+  overflow: auto;
+  background-color: rgb(255, 255, 255);
+  border: burlywood 10px groove;
+}
+#close-modal {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 2;
+  background-color: burlywood;
+  color: white;
+  border: rgb(133, 108, 76) 2px solid;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#event-modal-text {
+  padding: 20px;
+  font-size: larger;
+  font-family: 'Courier New', Courier, monospace
+}
+#event-modal-headline {
+  padding: 20px;
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace
+}
+</style>
+</html>
