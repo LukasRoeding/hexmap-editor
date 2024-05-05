@@ -128,6 +128,7 @@ function drawSavedGrid() {
 function generateGrid() {
     killGrid()
     const perlin = new Perlin();
+    const structuresPerlin = new Perlin();
     const row = rowInput.value;
     const col = colInput.value * 3;
     const x0 = 0;
@@ -140,14 +141,21 @@ function generateGrid() {
         const x = x0 + i * dx + (j % 2) * (r*1.5); // offset every other column
         const y = y0 + j * dy;
         const colorvalue = perlin.perlin(i*0.075, j*0.0375);
-        if(colorvalue < -0.35) {
+        const structurevalue = structuresPerlin.perlin(i*0.075, j*0.0375);
+        if(structurevalue < -0.4 && colorvalue >= -0.25 && colorvalue < 0.3) {
+            // TODO Implement City Tile
+            drawHexagon(x, y, "#000000", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#000000", discovered: false, event: "", eventHeadline: ""});
+        }
+        else if(colorvalue < -0.35) {
             drawHexagon(x, y, "#0075c4", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#0075c4", discovered: false, event: "", eventHeadline: ""});
         }
         else if(colorvalue < -0.25) {
             drawHexagon(x, y, "#0099ff", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#0099ff", discovered: false, event: "", eventHeadline: ""});
-        } else if(colorvalue < -0.195) {
+        } 
+        else if(colorvalue < -0.195) {
             drawHexagon(x, y, "#ffff75", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#ffff75", discovered: false, event: "", eventHeadline: ""});
         }
@@ -158,14 +166,16 @@ function generateGrid() {
         else if(colorvalue < 0.25) {
             drawHexagon(x, y, "#2a9e2a", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#2a9e2a", discovered: false, event: "", eventHeadline: ""});
-        } else if(colorvalue < 0.3){
+        } 
+        else if(colorvalue < 0.3){
             drawHexagon(x, y, "#C4A484", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#C4A484", discovered: false, event: "", eventHeadline: ""});
         } 
         else if(colorvalue < 0.46){
             drawHexagon(x, y, "#808080", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#808080", discovered: false, event: "", eventHeadline: ""});
-        } else {
+        } 
+        else {
             drawHexagon(x, y, "#FFFAFA", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#FFFAFA", discovered: false, event: "", eventHeadline: ""});
         }
