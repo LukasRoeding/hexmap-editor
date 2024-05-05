@@ -6,20 +6,19 @@
     <title>Hexgrid Editor</title>
 </head>
 <body>
-    <div>
-        <p>Reihen</p>
-        <input type="number" id="col-input">
-    </div>
-    <div>
-        <p>Spalter</p>
-        <input type="number" id="row-input">
-    </div>
-    <div>
-        <button id="generateGridButton">Generate Grid</button>
-    </div>
     <div class="tile-editor">
-        <div id="canvas" style="height: 100vh; background:rgb(255, 255, 255); overflow:scroll; position: relative; flex: auto"></div>
-        <div class="edit-single-tile" style="padding: 5px">
+        <div id="canvas" style="height: 100vh; background:rgb(34, 34, 34); overflow:scroll; position: relative; flex: auto"></div>
+        <div class="edit-single-tile" style="padding: 5px">    <div>
+            <p>Reihen</p>
+                <input type="number" id="col-input">
+            </div>
+            <div>
+                <p>Spalter</p>
+                <input type="number" id="row-input">
+            </div>    
+            <div>
+                <button id="generateGridButton">Generate Grid</button>
+            </div>
             <div style="margin-bottom: 10px">
                 <p>Farbe</p>
                 <input type="color" id="color-input" style="width:100%">
@@ -130,7 +129,7 @@ function generateGrid() {
     killGrid()
     const perlin = new Perlin();
     const row = rowInput.value;
-    const col = colInput.value * 2;
+    const col = colInput.value * 3;
     const x0 = 0;
     const y0 = 0; // Start at the top of the canvas
     const dx = 3 * r;
@@ -141,31 +140,34 @@ function generateGrid() {
         const x = x0 + i * dx + (j % 2) * (r*1.5); // offset every other column
         const y = y0 + j * dy;
         const colorvalue = perlin.perlin(i*0.075, j*0.0375);
-        if(colorvalue < -0.25) {
-            drawHexagon(x, y, "#0081d6", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#0081d6", discovered: false, event: "", eventHeadline: ""});
+        if(colorvalue < -0.35) {
+            drawHexagon(x, y, "#0075c4", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#0075c4", discovered: false, event: "", eventHeadline: ""});
         }
-        else if(colorvalue < -0.15) {
+        else if(colorvalue < -0.25) {
             drawHexagon(x, y, "#0099ff", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#0099ff", discovered: false, event: "", eventHeadline: ""});
-        } else if(colorvalue < -0.095) {
+        } else if(colorvalue < -0.195) {
             drawHexagon(x, y, "#ffff75", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#ffff75", discovered: false, event: "", eventHeadline: ""});
         }
-        else if(colorvalue < 0.1) {
-            drawHexagon(x, y, "#b0eb80", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#b0eb80", discovered: false, event: "", eventHeadline: ""});
+        else if(colorvalue < 0.05) {
+            drawHexagon(x, y, "#3de42e", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#3de42e", discovered: false, event: "", eventHeadline: ""});
         } 
         else if(colorvalue < 0.25) {
-            drawHexagon(x, y, "#5dd55d", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#5dd55d", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#2a9e2a", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#2a9e2a", discovered: false, event: "", eventHeadline: ""});
         } else if(colorvalue < 0.3){
             drawHexagon(x, y, "#C4A484", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#C4A484", discovered: false, event: "", eventHeadline: ""});
         } 
-        else {
+        else if(colorvalue < 0.46){
             drawHexagon(x, y, "#808080", true, hexGrid.length, "", "");
             hexGrid.push({x: i, y: j, color: "#808080", discovered: false, event: "", eventHeadline: ""});
+        } else {
+            drawHexagon(x, y, "#FFFAFA", true, hexGrid.length, "", "");
+            hexGrid.push({x: i, y: j, color: "#FFFAFA", discovered: false, event: "", eventHeadline: ""});
         }
     }}
     const jsonData = JSON.stringify(hexGrid);
@@ -242,7 +244,7 @@ return "#"+RR+GG+BB;
         flex-direction: row;
     }
     .active {
-        background-color: grey !important;
+        background-color: rgb(255, 62, 62) !important;
     }
 </style>
 </html>
