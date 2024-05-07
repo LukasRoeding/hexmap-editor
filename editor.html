@@ -121,7 +121,7 @@ function drawSavedGrid() {
   for (let i = 0; i < parsedData.length; i++) {
       const x = x0 + parsedData[i].x * dx + (parsedData[i].y % 2) * (r*1.5); // offset every other column
       const y = y0 + parsedData[i].y * dy;
-      drawHexagon(x, y, parsedData[i].color, parsedData[i].discovered, i, parsedData[i].event, parsedData[i].eventHeadline);
+      drawHexagon(x, y, parsedData[i].color, parsedData[i].discovered, i, parsedData[i].event, parsedData[i].eventHeadline, parsedData[i].image);
   }
 }
 
