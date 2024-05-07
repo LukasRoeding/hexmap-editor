@@ -142,42 +142,41 @@ function generateGrid() {
         const y = y0 + j * dy;
         const colorvalue = perlin.perlin(i*0.075, j*0.0375);
         const structurevalue = structuresPerlin.perlin(i*0.075, j*0.0375);
-        if(structurevalue < -0.4 && colorvalue >= -0.25 && colorvalue < 0.3) {
-            // TODO Implement City Tile
-            drawHexagon(x, y, "#000000", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#000000", discovered: false, event: "", eventHeadline: ""});
+        if(structurevalue < -0.41 && colorvalue >= -0.25) {
+            drawHexagon(x, y, "#A1662F", true, hexGrid.length, "", "", "images/house.svg");
+            hexGrid.push({x: i, y: j, color: "#A1662F", discovered: false, event: "", eventHeadline: "", image: "images/house.svg"});
         }
         else if(colorvalue < -0.35) {
-            drawHexagon(x, y, "#0075c4", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#0075c4", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#0075c4", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#0075c4", discovered: false, event: "", eventHeadline: "", image: ""});
         }
         else if(colorvalue < -0.25) {
-            drawHexagon(x, y, "#0099ff", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#0099ff", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#0099ff", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#0099ff", discovered: false, event: "", eventHeadline: "", image: ""});
         } 
         else if(colorvalue < -0.195) {
-            drawHexagon(x, y, "#ffff75", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#ffff75", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#ffff75", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#ffff75", discovered: false, event: "", eventHeadline: "", image: ""});
         }
         else if(colorvalue < 0.05) {
-            drawHexagon(x, y, "#3de42e", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#3de42e", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#3de42e", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#3de42e", discovered: false, event: "", eventHeadline: "", image: ""});
         } 
         else if(colorvalue < 0.25) {
-            drawHexagon(x, y, "#2a9e2a", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#2a9e2a", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#2a9e2a", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#2a9e2a", discovered: false, event: "", eventHeadline: "", image: ""});
         } 
         else if(colorvalue < 0.3){
-            drawHexagon(x, y, "#C4A484", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#C4A484", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#C4A484", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#C4A484", discovered: false, event: "", eventHeadline: "", image: ""});
         } 
         else if(colorvalue < 0.46){
-            drawHexagon(x, y, "#808080", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#808080", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#808080", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#808080", discovered: false, event: "", eventHeadline: "", image: ""});
         } 
         else {
-            drawHexagon(x, y, "#FFFAFA", true, hexGrid.length, "", "");
-            hexGrid.push({x: i, y: j, color: "#FFFAFA", discovered: false, event: "", eventHeadline: ""});
+            drawHexagon(x, y, "#FFFAFA", true, hexGrid.length, "", "", "");
+            hexGrid.push({x: i, y: j, color: "#FFFAFA", discovered: false, event: "", eventHeadline: "", image: ""});
         }
     }}
     const jsonData = JSON.stringify(hexGrid);
@@ -185,7 +184,7 @@ function generateGrid() {
     localStorage.setItem('jsonData', jsonData);
 }
 
-function drawHexagon(x, y, color, discovered, index, event, eventHeadline) {
+function drawHexagon(x, y, color, discovered, index, event, eventHeadline, image) {
   const newHexagon = document.createElement("div");
     newHexagon.style.backgroundColor = color;
     newHexagon.style.cursor = "pointer";
@@ -215,6 +214,15 @@ function drawHexagon(x, y, color, discovered, index, event, eventHeadline) {
   newHexagon.style.top = y + "px";
   newHexagon.style.clipPath = "polygon(25% 10%, 75% 10%, 95% 50%, 75% 90%, 25% 90%, 5% 50%)"
   newHexagon.classList.add("hexagon");
+  if(image) {
+    const img = document.createElement('img');
+    img.src = image;
+    img.style.width = "70%";
+    img.style.height = "70%";
+    img.style.margin = "15%";
+    newHexagon.appendChild(img)
+  }
+
   canvas.appendChild(newHexagon);
 }
 
