@@ -84,10 +84,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; background-color: white; border-radius: 10px;">
-                <button id="control-edit-left" class="btn btn-primary"><=</button>
-                <button id="control-edit-right" class="btn btn-primary disabled">=></button>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                            Editor bewegen
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div style="display: flex; justify-content: space-between; background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                <button id="control-edit-left" class="btn btn-primary"><=</button>
+                                <button id="control-edit-right" class="btn btn-primary disabled">=></button>
+                            </div>                
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -304,7 +315,7 @@ function drawHexagon(x, y, color, discovered, index, event, eventHeadline, image
         position: fixed;
         top: 10px;
         right: 30px;
-        width: 300px
+        width: 300px;
     }
     .edit-single-tile.left {
         position: fixed;
