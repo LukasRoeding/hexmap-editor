@@ -158,10 +158,8 @@ function saveTile() {
     if (currentIndex.length !== 0) {
         const hexagons = document.querySelectorAll(".active");
         for (let i = 0; i < hexagons.length; i++) {
-            if(colorInput.value !== "#000000") {
-                hexagons[i].style.backgroundColor = colorInput.value;
-                hexGrid[currentIndex[i]].color = colorInput.value;
-            }
+            hexagons[i].style.backgroundColor = colorInput.value;
+            hexGrid[currentIndex[i]].color = colorInput.value;
             if (headlineInput.value !== "" && eventInput.value !== "") {
                 hexGrid[currentIndex[i]].eventHeadline = headlineInput.value;
                 hexGrid[currentIndex[i]].event = eventInput.value;
